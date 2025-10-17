@@ -86,6 +86,26 @@ export default function Contacts() {
             <meta itemProp="description" content="Профессиональная музыкальная студия в Москве" />
             <link itemProp="url" href="https://dm-studio-production.ru" />
 
+            <div className="grid grid-cols-2 gap-4 pt-4">
+              <Button 
+                size="lg" 
+                className="glow-red w-full"
+                onClick={() => window.open('https://t.me/dmstudioproduction', '_blank')}
+              >
+                <Icon name="Send" className="w-5 h-5 mr-2" />
+                Telegram
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="border-primary/50 hover:glow-red w-full"
+                onClick={() => window.location.href = 'mailto:info@dm-studio.com'}
+              >
+                <Icon name="Mail" className="w-5 h-5 mr-2" />
+                Email
+              </Button>
+            </div>
+
             <div className="flex gap-4 justify-center pt-4">
               <Button size="icon" variant="outline" className="w-12 h-12 rounded-full border-primary/50 hover:glow-red">
                 <Icon name="Instagram" className="w-5 h-5" />

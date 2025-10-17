@@ -154,6 +154,26 @@ export default function Index() {
         {renderSection()}
       </main>
 
+      <div className="fixed bottom-8 right-8 flex flex-col gap-3 z-40">
+        <Button
+          size="icon"
+          className="w-14 h-14 rounded-full glow-red shadow-lg"
+          onClick={() => window.open('https://t.me/dmstudioproduction', '_blank')}
+          title="Написать в Telegram"
+        >
+          <Icon name="Send" className="w-6 h-6" />
+        </Button>
+        <Button
+          size="icon"
+          variant="outline"
+          className="w-14 h-14 rounded-full border-primary/50 hover:glow-red shadow-lg bg-black/80 backdrop-blur-sm"
+          onClick={() => window.location.href = 'mailto:info@dm-studio.com'}
+          title="Написать на Email"
+        >
+          <Icon name="Mail" className="w-6 h-6" />
+        </Button>
+      </div>
+
       <footer className="bg-black/60 backdrop-blur-sm border-t border-primary/20 mt-20">
         <div className="container mx-auto px-4 py-8 text-center">
           <p className="text-muted-foreground">© 2024 DM STUDIO PRODUCTION. Все права защищены.</p>
