@@ -13,7 +13,7 @@ const mockPlaylists = [
 
 export default function Playlists() {
   return (
-    <section className="container mx-auto px-4 py-12">
+    <section className="container mx-auto px-4 py-12" id="playlists">
       <div className="mb-8 animate-fade-in">
         <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow">Плейлисты</h2>
         <p className="text-muted-foreground text-lg">Подборки для любого настроения</p>
@@ -25,6 +25,8 @@ export default function Playlists() {
             key={playlist.id}
             className="group overflow-hidden bg-card border-primary/20 hover:glow-red transition-all cursor-pointer animate-fade-in"
             style={{ animationDelay: `${index * 0.1}s` }}
+            itemScope
+            itemType="https://schema.org/MusicPlaylist"
           >
             <div className={`h-48 bg-gradient-to-br ${playlist.cover} relative`}>
               <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all" />
@@ -41,7 +43,8 @@ export default function Playlists() {
             </div>
 
             <div className="p-5">
-              <h3 className="font-bold text-xl mb-2">{playlist.name}</h3>
+              <h3 className="font-bold text-xl mb-2" itemProp="name">{playlist.name}</h3>
+              <meta itemProp="numTracks" content={playlist.tracks.toString()} />
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Icon name="Clock" className="w-4 h-4" />

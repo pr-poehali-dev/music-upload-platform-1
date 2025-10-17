@@ -28,10 +28,10 @@ export default function Contacts() {
   };
 
   return (
-    <section className="container mx-auto px-4 py-12">
+    <section className="container mx-auto px-4 py-12" id="contacts" itemScope itemType="https://schema.org/LocalBusiness">
       <div className="max-w-5xl mx-auto">
         <div className="mb-12 text-center animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow">Контакты</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow" itemProp="name">Контакты</h2>
           <p className="text-muted-foreground text-lg">Свяжитесь с нами любым удобным способом</p>
         </div>
 
@@ -45,7 +45,7 @@ export default function Contacts() {
                 <div>
                   <h3 className="font-bold text-lg mb-2">Email</h3>
                   <p className="text-muted-foreground mb-2">Напишите нам на почту</p>
-                  <a href="mailto:info@dm-studio.com" className="text-primary hover:underline">
+                  <a href="mailto:info@dm-studio.com" className="text-primary hover:underline" itemProp="email">
                     info@dm-studio.com
                   </a>
                 </div>
@@ -60,7 +60,7 @@ export default function Contacts() {
                 <div>
                   <h3 className="font-bold text-lg mb-2">Телефон</h3>
                   <p className="text-muted-foreground mb-2">Звоните в любое время</p>
-                  <a href="tel:+79991234567" className="text-secondary hover:underline">
+                  <a href="tel:+79991234567" className="text-secondary hover:underline" itemProp="telephone">
                     +7 (999) 123-45-67
                   </a>
                 </div>
@@ -72,15 +72,19 @@ export default function Contacts() {
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center flex-shrink-0">
                   <Icon name="MapPin" className="w-6 h-6" />
                 </div>
-                <div>
+                <div itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
                   <h3 className="font-bold text-lg mb-2">Адрес</h3>
                   <p className="text-muted-foreground mb-2">Посетите нашу студию</p>
                   <p className="text-foreground">
-                    г. Москва, ул. Музыкальная, д. 1
+                    <span itemProp="addressLocality">г. Москва</span>, <span itemProp="streetAddress">ул. Музыкальная, д. 1</span>
                   </p>
+                  <meta itemProp="addressCountry" content="RU" />
                 </div>
               </div>
             </Card>
+            <meta itemProp="name" content="DM STUDIO PRODUCTION" />
+            <meta itemProp="description" content="Профессиональная музыкальная студия в Москве" />
+            <link itemProp="url" href="https://dm-studio-production.ru" />
 
             <div className="flex gap-4 justify-center pt-4">
               <Button size="icon" variant="outline" className="w-12 h-12 rounded-full border-primary/50 hover:glow-red">

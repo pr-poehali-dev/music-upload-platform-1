@@ -33,6 +33,80 @@
     <meta name="language" content="Russian">
     <meta name="revisit-after" content="7 days">
     <link rel="canonical" href="https://dm-studio-production.ru/">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "MusicGroup",
+          "@id": "https://dm-studio-production.ru/#musicgroup",
+          "name": "DM STUDIO PRODUCTION",
+          "url": "https://dm-studio-production.ru",
+          "image": "https://cdn.poehali.dev/files/61c1df8e-9bf0-4e18-b18c-7481fb417ce7.jpeg",
+          "description": "Студия Дмитрия Минского — поэта-песенника с 30-летним стажем. Профессиональная музыкальная студия: аренда студии звукозаписи, запись треков, продажа битов и минусов.",
+          "genre": ["Hip Hop", "Pop", "Rock", "Electronic", "Jazz"],
+          "founder": {
+            "@type": "Person",
+            "name": "Дмитрий Минский"
+          }
+        },
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://dm-studio-production.ru/#organization",
+          "name": "DM STUDIO PRODUCTION",
+          "url": "https://dm-studio-production.ru",
+          "logo": "https://cdn.poehali.dev/files/61c1df8e-9bf0-4e18-b18c-7481fb417ce7.jpeg",
+          "image": "https://cdn.poehali.dev/projects/54e1c591-87c3-419c-9fbc-454c772a47ee/files/ecc5fa92-2319-4c50-945a-46ef0f66418e.jpg",
+          "description": "Профессиональная музыкальная студия в Москве. Аренда студии звукозаписи, профессиональная запись треков, продажа битов и минусов. Качественное сведение и мастеринг.",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "ул. Музыкальная, д. 1",
+            "addressLocality": "Москва",
+            "addressCountry": "RU"
+          },
+          "telephone": "+7-999-123-45-67",
+          "email": "info@dm-studio.com",
+          "priceRange": "₽₽",
+          "openingHours": "Mo-Su 09:00-21:00"
+        },
+        {
+          "@type": "Service",
+          "serviceType": "Музыкальное производство",
+          "provider": {
+            "@id": "https://dm-studio-production.ru/#organization"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Услуги студии",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Аренда студии звукозаписи"
+                },
+                "priceCurrency": "RUB",
+                "price": "2000"
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Product",
+                  "name": "Биты и минуса"
+                },
+                "priceCurrency": "RUB",
+                "lowPrice": "890",
+                "highPrice": "1990",
+                "availability": "https://schema.org/InStock"
+              }
+            ]
+          }
+        }
+      ]
+    }
+    </script>
 
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS COMMENT! -->
 

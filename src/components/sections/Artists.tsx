@@ -15,7 +15,7 @@ const mockArtists = [
 
 export default function Artists() {
   return (
-    <section className="container mx-auto px-4 py-12">
+    <section className="container mx-auto px-4 py-12" id="artists">
       <div className="mb-8 animate-fade-in">
         <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow">Исполнители</h2>
         <p className="text-muted-foreground text-lg">Познакомьтесь с талантливыми артистами</p>
@@ -27,6 +27,8 @@ export default function Artists() {
             key={artist.id}
             className="p-6 bg-gradient-to-br from-card to-card/50 border-primary/20 hover:glow-red transition-all animate-fade-in"
             style={{ animationDelay: `${index * 0.1}s` }}
+            itemScope
+            itemType="https://schema.org/MusicGroup"
           >
             <div className="flex flex-col items-center text-center">
               <Avatar className="w-24 h-24 mb-4 ring-2 ring-primary/50 ring-offset-2 ring-offset-background">
@@ -36,15 +38,16 @@ export default function Artists() {
               </Avatar>
 
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-bold text-xl">{artist.name}</h3>
+                <h3 className="font-bold text-xl" itemProp="name">{artist.name}</h3>
                 {artist.verified && (
                   <Icon name="BadgeCheck" className="w-5 h-5 text-primary" />
                 )}
               </div>
 
               <Badge variant="outline" className="mb-4 border-primary/50">
-                {artist.genre}
+                <span itemProp="genre">{artist.genre}</span>
               </Badge>
+              <meta itemProp="url" content={`https://dm-studio-production.ru/#artists/${artist.id}`} />
 
               <div className="grid grid-cols-2 gap-4 w-full mb-6">
                 <div className="bg-background/50 rounded-lg p-3">

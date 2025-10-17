@@ -3,16 +3,16 @@ import Icon from '@/components/ui/icon';
 
 export default function About() {
   return (
-    <section className="container mx-auto px-4 py-12">
+    <section className="container mx-auto px-4 py-12" id="about" itemScope itemType="https://schema.org/MusicGroup">
       <div className="max-w-4xl mx-auto">
         <div className="mb-12 text-center animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow">О студии</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow" itemProp="name">О студии</h2>
           <p className="text-muted-foreground text-lg">Профессиональная музыкальная платформа</p>
         </div>
 
         <div className="mb-12 animate-fade-in">
           <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-primary/20">
-            <div className="prose prose-invert max-w-none">
+            <div className="prose prose-invert max-w-none" itemProp="description">
               <p className="text-lg text-foreground/90 leading-relaxed mb-4">
                 <span className="text-primary font-bold text-2xl">DM STUDIO PRODUCTION</span> — это современная музыкальная платформа, 
                 созданная для артистов и любителей музыки. Мы предоставляем инструменты для создания, 
@@ -31,6 +31,15 @@ export default function About() {
               </p>
             </div>
           </Card>
+        </div>
+        <div itemScope itemType="https://schema.org/Organization" style={{ display: 'none' }}>
+          <span itemProp="name">DM STUDIO PRODUCTION</span>
+          <div itemProp="address" itemScope itemType="https://schema.org/PostalAddress">
+            <meta itemProp="addressLocality" content="Москва" />
+            <meta itemProp="addressCountry" content="RU" />
+          </div>
+          <link itemProp="url" href="https://dm-studio-production.ru" />
+          <meta itemProp="description" content="Профессиональная музыкальная студия: аренда студии звукозаписи, запись треков, продажа битов и минусов, сведение и мастеринг" />
         </div>
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
