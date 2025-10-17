@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import Icon from '@/components/ui/icon';
+import AudioWaveform from '@/components/AudioWaveform';
 
 interface Track {
   id: number;
@@ -23,7 +24,9 @@ export default function AudioPlayer({ track, onClose }: AudioPlayerProps) {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(70);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const animationRef = useRef<number>();
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -54,8 +57,13 @@ export default function AudioPlayer({ track, onClose }: AudioPlayerProps) {
   const handleTimeUpdate = useCallback(() => {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
+      
+      if (isPlaying) {
+        const level = Math.random() * 0.5 + 0.5;
+        setAudioLevel(level);
+      }
     }
-  }, []);
+  }, [isPlaying]);
 
   const handleLoadedMetadata = useCallback(() => {
     if (audioRef.current) {
@@ -73,11 +81,21 @@ export default function AudioPlayer({ track, onClose }: AudioPlayerProps) {
   const handleEnded = useCallback(() => {
     setIsPlaying(false);
     setCurrentTime(0);
+    setAudioLevel(0);
   }, []);
 
   const toggleFavorite = useCallback(() => {
     setIsFavorite(prev => !prev);
   }, []);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      setAudioLevel(0);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    }
+  }, [isPlaying]);
 
   const formatTime = useMemo(() => {
     return (time: number) => {
@@ -104,8 +122,24 @@ export default function AudioPlayer({ track, onClose }: AudioPlayerProps) {
       <Card className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-primary/30 glow-red animate-slide-up">
         <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center gap-2 md:gap-4">
-            <div className="hidden md:flex w-14 h-14 lg:w-16 lg:h-16 rounded-lg bg-gradient-to-br from-primary to-secondary items-center justify-center flex-shrink-0 glow-red">
-              <Icon name="Music" className="w-6 h-6 lg:w-8 lg:h-8" />
+            <div className="hidden md:flex w-14 h-14 lg:w-16 lg:h-16 rounded-lg bg-gradient-to-br from-primary to-secondary items-center justify-center flex-shrink-0 glow-red relative overflow-hidden group">
+              <div 
+                className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent transition-all duration-200"
+                style={{ 
+                  transform: `translateY(${100 - (audioLevel * 100)}%)`,
+                  opacity: isPlaying ? 1 : 0
+                }}
+              />
+              <Icon 
+                name="Music" 
+                className="w-6 h-6 lg:w-8 lg:h-8 relative z-10 transition-transform duration-200" 
+                style={{ 
+                  transform: isPlaying ? `scale(${1 + audioLevel * 0.2})` : 'scale(1)'
+                }}
+              />
+              {isPlaying && (
+                <div className="absolute inset-0 animate-pulse-glow" />
+              )}
             </div>
 
             <div className="flex-1 min-w-0">
@@ -163,7 +197,14 @@ export default function AudioPlayer({ track, onClose }: AudioPlayerProps) {
             </div>
           </div>
 
-          <div className="mt-2 md:mt-3">
+          <div className="mt-2 md:mt-3 space-y-2">
+            <div className="hidden md:block">
+              <AudioWaveform 
+                isPlaying={isPlaying} 
+                currentTime={currentTime} 
+                duration={duration} 
+              />
+            </div>
             <Slider
               value={[currentTime]}
               onValueChange={handleSeek}
