@@ -4,19 +4,31 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
+import AudioPlayer from '@/components/AudioPlayer';
 
 const mockTracks = [
-  { id: 1, title: 'Summer Vibes', artist: 'DJ Nova', genre: 'House', duration: '3:45', plays: '12.5K' },
-  { id: 2, title: 'Night Drive', artist: 'Echo Sound', genre: 'Synthwave', duration: '4:20', plays: '8.2K' },
-  { id: 3, title: 'Electric Dreams', artist: 'Wave Master', genre: 'EDM', duration: '5:10', plays: '15.7K' },
-  { id: 4, title: 'Midnight Jazz', artist: 'Soul Fusion', genre: 'Jazz', duration: '6:30', plays: '5.3K' },
-  { id: 5, title: 'Bass Drop', artist: 'Heavy Beats', genre: 'Dubstep', duration: '3:55', plays: '20.1K' },
-  { id: 6, title: 'Acoustic Soul', artist: 'String Theory', genre: 'Acoustic', duration: '4:15', plays: '9.8K' },
+  { id: 1, title: 'Summer Vibes', artist: 'DJ Nova', genre: 'House', duration: '3:45', plays: '12.5K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+  { id: 2, title: 'Night Drive', artist: 'Echo Sound', genre: 'Synthwave', duration: '4:20', plays: '8.2K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+  { id: 3, title: 'Electric Dreams', artist: 'Wave Master', genre: 'EDM', duration: '5:10', plays: '15.7K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+  { id: 4, title: 'Midnight Jazz', artist: 'Soul Fusion', genre: 'Jazz', duration: '6:30', plays: '5.3K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+  { id: 5, title: 'Bass Drop', artist: 'Heavy Beats', genre: 'Dubstep', duration: '3:55', plays: '20.1K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
+  { id: 6, title: 'Acoustic Soul', artist: 'String Theory', genre: 'Acoustic', duration: '4:15', plays: '9.8K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' },
 ];
+
+interface Track {
+  id: number;
+  title: string;
+  artist: string;
+  genre: string;
+  duration: string;
+  plays: string;
+  audioUrl: string;
+}
 
 export default function Tracks() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
 
   const genres = ['all', 'House', 'Synthwave', 'EDM', 'Jazz', 'Dubstep', 'Acoustic'];
 
@@ -94,7 +106,12 @@ export default function Tracks() {
               </div>
 
               <div className="flex gap-2">
-                <Button size="icon" variant="ghost" className="hover:bg-primary/20">
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
+                  className="hover:bg-primary/20"
+                  onClick={() => setCurrentTrack(track)}
+                >
                   <Icon name="Play" className="w-5 h-5" />
                 </Button>
                 <Button size="icon" variant="ghost" className="hover:bg-primary/20">
@@ -115,6 +132,8 @@ export default function Tracks() {
           <p className="text-muted-foreground text-lg">Треки не найдены</p>
         </div>
       )}
+
+      <AudioPlayer track={currentTrack} onClose={() => setCurrentTrack(null)} />
     </section>
   );
 }
