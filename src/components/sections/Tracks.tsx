@@ -8,12 +8,12 @@ import AudioPlayer from '@/components/AudioPlayer';
 import PaymentDialog from '@/components/PaymentDialog';
 
 const mockTracks = [
-  { id: 1, title: 'Summer Vibes', artist: 'DJ Nova', genre: 'House', duration: '3:45', plays: '12.5K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
-  { id: 2, title: 'Night Drive', artist: 'Echo Sound', genre: 'Synthwave', duration: '4:20', plays: '8.2K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
-  { id: 3, title: 'Electric Dreams', artist: 'Wave Master', genre: 'EDM', duration: '5:10', plays: '15.7K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
-  { id: 4, title: 'Midnight Jazz', artist: 'Soul Fusion', genre: 'Jazz', duration: '6:30', plays: '5.3K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
-  { id: 5, title: 'Bass Drop', artist: 'Heavy Beats', genre: 'Dubstep', duration: '3:55', plays: '20.1K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
-  { id: 6, title: 'Acoustic Soul', artist: 'String Theory', genre: 'Acoustic', duration: '4:15', plays: '9.8K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' },
+  { id: 1, title: 'Summer Vibes', artist: 'DJ Nova', genre: 'House', duration: '3:45', plays: '12.5K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+  { id: 2, title: 'Night Drive', artist: 'Echo Sound', genre: 'Synthwave', duration: '4:20', plays: '8.2K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' },
+  { id: 3, title: 'Electric Dreams', artist: 'Wave Master', genre: 'EDM', duration: '5:10', plays: '15.7K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3' },
+  { id: 4, title: 'Midnight Jazz', artist: 'Soul Fusion', genre: 'Jazz', duration: '6:30', plays: '5.3K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3' },
+  { id: 5, title: 'Bass Drop', artist: 'Heavy Beats', genre: 'Dubstep', duration: '3:55', plays: '20.1K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3', downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3' },
+  { id: 6, title: 'Acoustic Soul', artist: 'String Theory', genre: 'Acoustic', duration: '4:15', plays: '9.8K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3', downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3' },
 ];
 
 interface Track {
@@ -24,6 +24,7 @@ interface Track {
   duration: string;
   plays: string;
   audioUrl: string;
+  downloadUrl: string;
 }
 
 export default function Tracks() {
@@ -149,10 +150,12 @@ export default function Tracks() {
                       className="hover:bg-primary/20"
                       onClick={() => {
                         const link = document.createElement('a');
-                        link.href = track.audioUrl;
+                        link.href = track.downloadUrl;
                         link.download = `${track.title} - ${track.artist}.mp3`;
+                        link.target = '_blank';
                         link.click();
                       }}
+                      title={`Скачать: ${track.title}`}
                     >
                       <Icon name="Download" className="w-5 h-5" />
                     </Button>

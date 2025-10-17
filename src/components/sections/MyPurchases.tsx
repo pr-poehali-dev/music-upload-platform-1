@@ -85,11 +85,50 @@ export default function MyPurchases() {
     });
   };
 
-  const handleDownload = (purchase: Purchase) => {
-    toast({
-      title: 'Скачивание начато',
-      description: `${purchase.trackTitle} - ${purchase.trackArtist}`,
-    });
+  const handleDownload = async (purchase: Purchase) => {
+    try {
+      const savedEmail = localStorage.getItem('user-email');
+      if (!savedEmail) {
+        toast({
+          title: 'Ошибка',
+          description: 'Не найден email',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      toast({
+        title: 'Подготовка ссылки...',
+        description: 'Пожалуйста, подождите',
+      });
+
+      const response = await fetch(
+        `https://functions.poehali.dev/be87f3fa-058b-4a96-a4d1-881c58d84d1c?email=${encodeURIComponent(savedEmail)}&track_id=${purchase.trackId}`
+      );
+
+      if (!response.ok) {
+        throw new Error('Не удалось получить ссылку');
+      }
+
+      const data = await response.json();
+      
+      const link = document.createElement('a');
+      link.href = data.downloadUrl;
+      link.download = data.filename;
+      link.target = '_blank';
+      link.click();
+
+      toast({
+        title: 'Скачивание начато!',
+        description: `${purchase.trackTitle} - ${purchase.trackArtist}`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Ошибка скачивания',
+        description: 'Попробуйте позже',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -181,12 +220,13 @@ export default function MyPurchases() {
 
                   <div className="flex gap-2">
                     <Button
-                      size="icon"
-                      variant="ghost"
-                      className="hover:bg-primary/20"
+                      variant="default"
+                      size="sm"
+                      className="glow-red"
                       onClick={() => handleDownload(purchase)}
                     >
-                      <Icon name="Download" className="w-5 h-5" />
+                      <Icon name="Download" className="w-4 h-4 mr-2" />
+                      Скачать
                     </Button>
                     <div className="flex items-center px-2">
                       <Icon name="CheckCircle2" className="w-5 h-5 text-primary" />

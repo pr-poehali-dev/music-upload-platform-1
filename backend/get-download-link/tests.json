@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test download without parameters",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test download with valid purchase",
+      "method": "GET",
+      "path": "/?email=user@example.com&track_id=1",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "downloadUrl": "string",
+        "trackTitle": "string",
+        "trackArtist": "string",
+        "filename": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
