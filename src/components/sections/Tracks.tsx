@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
 import AudioPlayer from '@/components/AudioPlayer';
+import PaymentDialog from '@/components/PaymentDialog';
 
 const mockTracks = [
   { id: 1, title: 'Summer Vibes', artist: 'DJ Nova', genre: 'House', duration: '3:45', plays: '12.5K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
@@ -29,6 +30,8 @@ export default function Tracks() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('all');
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [paymentTrack, setPaymentTrack] = useState<Track | null>(null);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
   const genres = ['all', 'House', 'Synthwave', 'EDM', 'Jazz', 'Dubstep', 'Acoustic'];
 
@@ -117,7 +120,15 @@ export default function Tracks() {
                 <Button size="icon" variant="ghost" className="hover:bg-primary/20">
                   <Icon name="Heart" className="w-5 h-5" />
                 </Button>
-                <Button size="icon" variant="ghost" className="hover:bg-primary/20">
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
+                  className="hover:bg-primary/20"
+                  onClick={() => {
+                    setPaymentTrack(track);
+                    setIsPaymentOpen(true);
+                  }}
+                >
                   <Icon name="Download" className="w-5 h-5" />
                 </Button>
               </div>
@@ -134,6 +145,14 @@ export default function Tracks() {
       )}
 
       <AudioPlayer track={currentTrack} onClose={() => setCurrentTrack(null)} />
+      <PaymentDialog 
+        track={paymentTrack} 
+        isOpen={isPaymentOpen} 
+        onClose={() => {
+          setIsPaymentOpen(false);
+          setPaymentTrack(null);
+        }} 
+      />
     </section>
   );
 }
