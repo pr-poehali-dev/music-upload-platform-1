@@ -45,15 +45,15 @@ export default function Hero() {
           </div>
 
           <div className="p-6 rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 border border-secondary/20 hover:glow-pink transition-all">
-            <Icon name="Users" className="w-12 h-12 mb-4 mx-auto text-secondary" />
-            <h3 className="text-xl font-bold mb-2">50+ Артистов</h3>
-            <p className="text-muted-foreground">Талантливые музыканты со всего мира</p>
+            <Icon name="Calendar" className="w-12 h-12 mb-4 mx-auto text-secondary" />
+            <h3 className="text-xl font-bold mb-2">Анонсы</h3>
+            <p className="text-muted-foreground">Будущие релизы и предстоящие проекты</p>
           </div>
 
           <div className="p-6 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 hover:glow-red transition-all">
-            <Icon name="ListMusic" className="w-12 h-12 mb-4 mx-auto text-primary" />
-            <h3 className="text-xl font-bold mb-2">100+ Плейлистов</h3>
-            <p className="text-muted-foreground">Подборки на любой вкус и настроение</p>
+            <Icon name="Sparkles" className="w-12 h-12 mb-4 mx-auto text-primary" />
+            <h3 className="text-xl font-bold mb-2">Премьеры</h3>
+            <p className="text-muted-foreground">Новые треки и эксклюзивные композиции</p>
           </div>
         </div>
       </div>
