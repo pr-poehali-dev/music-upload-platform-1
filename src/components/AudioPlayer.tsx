@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -22,58 +22,71 @@ export default function AudioPlayer({ track, onClose }: AudioPlayerProps) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(70);
+  const [isFavorite, setIsFavorite] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    if (track && audioRef.current) {
-      audioRef.current.volume = volume / 100;
-    }
-  }, [volume, track]);
+    if (!audioRef.current) return;
+    audioRef.current.volume = volume / 100;
+  }, [volume]);
 
   useEffect(() => {
-    if (track) {
-      setIsPlaying(true);
-      if (audioRef.current) {
-        audioRef.current.play();
-      }
-    }
+    if (!track || !audioRef.current) return;
+    
+    setIsPlaying(true);
+    setCurrentTime(0);
+    audioRef.current.load();
+    audioRef.current.play().catch(() => setIsPlaying(false));
   }, [track]);
 
-  const togglePlay = () => {
+  const togglePlay = useCallback(() => {
     if (!audioRef.current) return;
 
     if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
     } else {
-      audioRef.current.play();
+      audioRef.current.play().catch(() => setIsPlaying(false));
+      setIsPlaying(true);
     }
-    setIsPlaying(!isPlaying);
-  };
+  }, [isPlaying]);
 
-  const handleTimeUpdate = () => {
+  const handleTimeUpdate = useCallback(() => {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
     }
-  };
+  }, []);
 
-  const handleLoadedMetadata = () => {
+  const handleLoadedMetadata = useCallback(() => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
     }
-  };
+  }, []);
 
-  const handleSeek = (value: number[]) => {
-    if (audioRef.current) {
+  const handleSeek = useCallback((value: number[]) => {
+    if (audioRef.current && !isNaN(value[0])) {
       audioRef.current.currentTime = value[0];
       setCurrentTime(value[0]);
     }
-  };
+  }, []);
 
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
+  const handleEnded = useCallback(() => {
+    setIsPlaying(false);
+    setCurrentTime(0);
+  }, []);
+
+  const toggleFavorite = useCallback(() => {
+    setIsFavorite(prev => !prev);
+  }, []);
+
+  const formatTime = useMemo(() => {
+    return (time: number) => {
+      if (isNaN(time)) return '0:00';
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60);
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    };
+  }, []);
 
   if (!track) return null;
 
@@ -84,71 +97,79 @@ export default function AudioPlayer({ track, onClose }: AudioPlayerProps) {
         src={track.audioUrl || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={handleEnded}
+        preload="metadata"
       />
 
       <Card className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-primary/30 glow-red animate-slide-up">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center gap-4">
-            <div className="hidden md:block w-16 h-16 rounded-lg bg-gradient-to-br from-primary to-secondary flex-shrink-0 glow-red" />
+        <div className="container mx-auto px-4 py-3 md:py-4">
+          <div className="flex items-center gap-2 md:gap-4">
+            <div className="hidden md:flex w-14 h-14 lg:w-16 lg:h-16 rounded-lg bg-gradient-to-br from-primary to-secondary items-center justify-center flex-shrink-0 glow-red">
+              <Icon name="Music" className="w-6 h-6 lg:w-8 lg:h-8" />
+            </div>
 
             <div className="flex-1 min-w-0">
-              <h4 className="font-bold text-lg truncate">{track.title}</h4>
-              <p className="text-sm text-muted-foreground truncate">{track.artist}</p>
+              <h4 className="font-bold text-base md:text-lg truncate">{track.title}</h4>
+              <p className="text-xs md:text-sm text-muted-foreground truncate">{track.artist}</p>
             </div>
 
-            <div className="flex items-center gap-4 flex-shrink-0">
-              <Button size="icon" variant="ghost" className="hover:bg-primary/20">
-                <Icon name="SkipBack" className="w-5 h-5" />
-              </Button>
-
+            <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
               <Button 
                 size="icon" 
-                className="w-12 h-12 rounded-full glow-red"
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full glow-red"
                 onClick={togglePlay}
               >
-                <Icon name={isPlaying ? 'Pause' : 'Play'} className="w-6 h-6" />
-              </Button>
-
-              <Button size="icon" variant="ghost" className="hover:bg-primary/20">
-                <Icon name="SkipForward" className="w-5 h-5" />
+                <Icon name={isPlaying ? 'Pause' : 'Play'} className="w-5 h-5 md:w-6 md:h-6" />
               </Button>
             </div>
 
-            <div className="hidden lg:flex items-center gap-3 w-48">
-              <Icon name="Volume2" className="w-5 h-5 text-muted-foreground" />
+            <div className="hidden lg:flex items-center gap-2 w-32 xl:w-40">
+              <Icon name="Volume2" className="w-4 h-4 text-muted-foreground" />
               <Slider
                 value={[volume]}
                 onValueChange={(value) => setVolume(value[0])}
                 max={100}
-                step={1}
+                step={5}
                 className="flex-1"
               />
             </div>
 
-            <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground min-w-24">
+            <div className="hidden sm:flex items-center gap-1 text-xs md:text-sm text-muted-foreground">
               <span>{formatTime(currentTime)}</span>
               <span>/</span>
               <span>{formatTime(duration)}</span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button size="icon" variant="ghost" className="hover:bg-primary/20">
-                <Icon name="Heart" className="w-5 h-5" />
+            <div className="flex items-center gap-1 md:gap-2">
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                className="hover:bg-primary/20 h-8 w-8 md:h-10 md:w-10"
+                onClick={toggleFavorite}
+              >
+                <Icon 
+                  name="Heart" 
+                  className={`w-4 h-4 md:w-5 md:h-5 ${isFavorite ? 'fill-primary text-primary' : ''}`} 
+                />
               </Button>
-              <Button size="icon" variant="ghost" onClick={onClose} className="hover:bg-primary/20">
-                <Icon name="X" className="w-5 h-5" />
+              <Button 
+                size="icon" 
+                variant="ghost" 
+                onClick={onClose} 
+                className="hover:bg-primary/20 h-8 w-8 md:h-10 md:w-10"
+              >
+                <Icon name="X" className="w-4 h-4 md:w-5 md:h-5" />
               </Button>
             </div>
           </div>
 
-          <div className="mt-3">
+          <div className="mt-2 md:mt-3">
             <Slider
               value={[currentTime]}
               onValueChange={handleSeek}
               max={duration || 100}
-              step={0.1}
-              className="w-full"
+              step={0.5}
+              className="w-full cursor-pointer"
             />
           </div>
         </div>
