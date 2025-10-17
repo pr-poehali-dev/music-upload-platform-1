@@ -14,7 +14,7 @@ export default function About() {
           <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-primary/20">
             <div className="prose prose-invert max-w-none">
               <p className="text-lg text-foreground/90 leading-relaxed mb-4">
-                <span className="text-primary font-bold text-2xl">DM-STUDIO</span> — это современная музыкальная платформа, 
+                <span className="text-primary font-bold text-2xl">DM STUDIO PRODUCTION</span> — это современная музыкальная платформа, 
                 созданная для артистов и любителей музыки. Мы предоставляем инструменты для создания, 
                 публикации и продвижения музыки.
               </p>

@@ -8,14 +8,14 @@ export default function Hero() {
         <div className="relative mb-8 animate-fade-in">
           <img 
             src="https://cdn.poehali.dev/files/61c1df8e-9bf0-4e18-b18c-7481fb417ce7.jpeg" 
-            alt="DM-STUDIO Logo" 
+            alt="DM STUDIO PRODUCTION Logo" 
             className="w-64 h-64 rounded-full glow-red animate-pulse-glow mx-auto"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-full"></div>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold mb-6 text-glow animate-fade-in">
-          DM-STUDIO
+          DM STUDIO PRODUCTION
         </h1>
         
         <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl animate-fade-in">

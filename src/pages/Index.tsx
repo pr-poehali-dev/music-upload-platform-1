@@ -52,10 +52,10 @@ export default function Index() {
             <div className="flex items-center gap-3">
               <img 
                 src="https://cdn.poehali.dev/files/61c1df8e-9bf0-4e18-b18c-7481fb417ce7.jpeg" 
-                alt="DM-STUDIO" 
+                alt="DM STUDIO PRODUCTION" 
                 className="w-12 h-12 rounded-full glow-red"
               />
-              <h1 className="text-2xl font-bold text-glow">DM-STUDIO</h1>
+              <h1 className="text-2xl font-bold text-glow">DM STUDIO PRODUCTION</h1>
             </div>
 
             <div className="hidden md:flex gap-2">
@@ -109,7 +109,7 @@ export default function Index() {
 
       <footer className="bg-black/60 backdrop-blur-sm border-t border-primary/20 mt-20">
         <div className="container mx-auto px-4 py-8 text-center">
-          <p className="text-muted-foreground">© 2024 DM-STUDIO. Все права защищены.</p>
+          <p className="text-muted-foreground">© 2024 DM STUDIO PRODUCTION. Все права защищены.</p>
         </div>
       </footer>
     </div>
