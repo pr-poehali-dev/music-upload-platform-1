@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,9 +6,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
+import AdminAuth from '@/components/AdminAuth';
 
 export default function Upload() {
   const { toast } = useToast();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [audioUrl, setAudioUrl] = useState('');
   const [formData, setFormData] = useState({
     title: '',
     artist: '',
@@ -16,6 +19,22 @@ export default function Upload() {
     description: '',
   });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    const adminAuth = localStorage.getItem('dm-studio-admin');
+    if (adminAuth === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('dm-studio-admin');
+    setIsAuthenticated(false);
+    toast({
+      title: 'Выход выполнен',
+      description: 'Сессия завершена',
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,14 +46,31 @@ export default function Upload() {
 
     setFormData({ title: '', artist: '', genre: '', description: '' });
     setSelectedFile(null);
+    setAudioUrl('');
   };
+
+  if (!isAuthenticated) {
+    return <AdminAuth onAuthenticated={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="max-w-3xl mx-auto">
-        <div className="mb-8 text-center animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-glow">Загрузить трек</h2>
-          <p className="text-muted-foreground text-lg">Поделитесь своей музыкой с миром</p>
+        <div className="mb-8 animate-fade-in">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-glow">Загрузить трек</h2>
+              <p className="text-muted-foreground text-lg mt-2">Поделитесь своей музыкой с миром</p>
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
+              className="border-primary/20 hover:bg-destructive/20 hover:border-destructive"
+            >
+              <Icon name="LogOut" className="w-4 h-4 mr-2" />
+              Выйти
+            </Button>
+          </div>
         </div>
 
         <Card className="p-8 bg-gradient-to-br from-card to-card/50 border-primary/20 animate-fade-in">
@@ -102,6 +138,28 @@ export default function Upload() {
                 className="bg-background border-primary/20"
                 required
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="audioUrl">
+                <div className="flex items-center gap-2">
+                  <Icon name="Link" className="w-4 h-4" />
+                  Ссылка на аудио *
+                </div>
+              </Label>
+              <Input
+                id="audioUrl"
+                type="url"
+                placeholder="https://example.com/audio.mp3"
+                value={audioUrl}
+                onChange={(e) => setAudioUrl(e.target.value)}
+                className="bg-background border-primary/20"
+                required
+              />
+              <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+                <Icon name="Info" className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <span>Вставьте прямую ссылку на MP3 файл с вашего хостинга или облачного хранилища</span>
+              </p>
             </div>
 
             <div className="space-y-2">
