@@ -16,18 +16,19 @@ export default function Hero() {
   };
 
   return (
-    <section className="container mx-auto px-4 py-20">
+    <section className="container mx-auto px-4 py-20" itemScope itemType="https://schema.org/MusicGroup">
       <div className="flex flex-col items-center justify-center min-h-[80vh] text-center">
         <div className="relative mb-8 animate-fade-in">
           <img 
             src="https://cdn.poehali.dev/files/61c1df8e-9bf0-4e18-b18c-7481fb417ce7.jpeg" 
-            alt="DM STUDIO PRODUCTION Logo" 
+            alt="DM STUDIO PRODUCTION - Профессиональная музыкальная студия Дмитрия Минского" 
             className="w-64 h-64 rounded-full glow-red animate-pulse-glow mx-auto"
+            itemProp="image"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-full"></div>
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-glow animate-fade-in">
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 text-glow animate-fade-in" itemProp="name">
           DM STUDIO PRODUCTION
         </h1>
         
