@@ -26,9 +26,10 @@ interface PaymentDialogProps {
   track: Track | null;
   isOpen: boolean;
   onClose: () => void;
+  onPurchaseComplete?: (trackId: number) => void;
 }
 
-export default function PaymentDialog({ track, isOpen, onClose }: PaymentDialogProps) {
+export default function PaymentDialog({ track, isOpen, onClose, onPurchaseComplete }: PaymentDialogProps) {
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -47,18 +48,23 @@ export default function PaymentDialog({ track, isOpen, onClose }: PaymentDialogP
     });
 
     setTimeout(() => {
-      const paymentUrl = `https://yookassa.ru/integration/simplepay/payment?sum=${price}&targets=${encodeURIComponent(`Скачивание трека: ${track.title} - ${track.artist}`)}&quickpay-form=shop&paymentType=&writer=seller&targets-hint=&default-sum=${price}&button-text=11&payment-type-choice=on&mail=on&fio=on&successURL=${encodeURIComponent(window.location.href)}`;
+      if (onPurchaseComplete && track) {
+        onPurchaseComplete(track.id);
+      }
+      
+      const paymentUrl = `https://yookassa.ru/integration/simplepay/payment?sum=${price}&targets=${encodeURIComponent(`Покупка трека: ${track.title} - ${track.artist}`)}&quickpay-form=shop&paymentType=&writer=seller&targets-hint=&default-sum=${price}&button-text=11&payment-type-choice=on&mail=on&fio=on&successURL=${encodeURIComponent(window.location.href)}`;
       
       window.open(paymentUrl, '_blank');
       
       setIsProcessing(false);
       
       toast({
-        title: 'Оплата открыта',
-        description: 'После успешной оплаты трек начнёт скачиваться автоматически',
+        title: 'Трек куплен!',
+        description: 'Теперь вы можете слушать и скачивать этот трек',
       });
       
       onClose();
+      setEmail('');
     }, 1000);
   };
 

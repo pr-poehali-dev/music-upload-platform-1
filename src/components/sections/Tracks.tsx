@@ -32,8 +32,29 @@ export default function Tracks() {
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [paymentTrack, setPaymentTrack] = useState<Track | null>(null);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [purchasedTracks, setPurchasedTracks] = useState<number[]>(() => {
+    const saved = localStorage.getItem('purchased-tracks');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const genres = ['all', 'House', 'Synthwave', 'EDM', 'Jazz', 'Dubstep', 'Acoustic'];
+
+  const isTrackPurchased = (trackId: number) => purchasedTracks.includes(trackId);
+
+  const handlePlayTrack = (track: Track) => {
+    if (!isTrackPurchased(track.id)) {
+      setPaymentTrack(track);
+      setIsPaymentOpen(true);
+      return;
+    }
+    setCurrentTrack(track);
+  };
+
+  const handlePurchaseComplete = (trackId: number) => {
+    const updated = [...purchasedTracks, trackId];
+    setPurchasedTracks(updated);
+    localStorage.setItem('purchased-tracks', JSON.stringify(updated));
+  };
 
   const filteredTracks = mockTracks.filter(track => {
     const matchesSearch = track.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -109,28 +130,60 @@ export default function Tracks() {
               </div>
 
               <div className="flex gap-2">
-                <Button 
-                  size="icon" 
-                  variant="ghost" 
-                  className="hover:bg-primary/20"
-                  onClick={() => setCurrentTrack(track)}
-                >
-                  <Icon name="Play" className="w-5 h-5" />
-                </Button>
-                <Button size="icon" variant="ghost" className="hover:bg-primary/20">
-                  <Icon name="Heart" className="w-5 h-5" />
-                </Button>
-                <Button 
-                  size="icon" 
-                  variant="ghost" 
-                  className="hover:bg-primary/20"
-                  onClick={() => {
-                    setPaymentTrack(track);
-                    setIsPaymentOpen(true);
-                  }}
-                >
-                  <Icon name="Download" className="w-5 h-5" />
-                </Button>
+                {isTrackPurchased(track.id) ? (
+                  <>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="hover:bg-primary/20"
+                      onClick={() => setCurrentTrack(track)}
+                    >
+                      <Icon name="Play" className="w-5 h-5" />
+                    </Button>
+                    <Button size="icon" variant="ghost" className="hover:bg-primary/20">
+                      <Icon name="Heart" className="w-5 h-5" />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="hover:bg-primary/20"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = track.audioUrl;
+                        link.download = `${track.title} - ${track.artist}.mp3`;
+                        link.click();
+                      }}
+                    >
+                      <Icon name="Download" className="w-5 h-5" />
+                    </Button>
+                    <div className="flex items-center px-2">
+                      <Icon name="CheckCircle2" className="w-5 h-5 text-primary" />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="hover:bg-primary/20 relative"
+                      onClick={() => handlePlayTrack(track)}
+                    >
+                      <Icon name="Lock" className="w-5 h-5" />
+                    </Button>
+                    <Button 
+                      variant="default"
+                      size="sm"
+                      className="glow-red"
+                      onClick={() => {
+                        setPaymentTrack(track);
+                        setIsPaymentOpen(true);
+                      }}
+                    >
+                      <Icon name="ShoppingCart" className="w-4 h-4 mr-1" />
+                      299 ₽
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </Card>
@@ -151,7 +204,8 @@ export default function Tracks() {
         onClose={() => {
           setIsPaymentOpen(false);
           setPaymentTrack(null);
-        }} 
+        }}
+        onPurchaseComplete={handlePurchaseComplete}
       />
     </section>
   );
