@@ -8,6 +8,7 @@ import Playlists from '@/components/sections/Playlists';
 import Artists from '@/components/sections/Artists';
 import About from '@/components/sections/About';
 import Contacts from '@/components/sections/Contacts';
+import MyPurchases from '@/components/sections/MyPurchases';
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState('home');
@@ -16,6 +17,7 @@ export default function Index() {
   const menuItems = [
     { id: 'home', label: 'Главная', icon: 'Home' },
     { id: 'tracks', label: 'Треки', icon: 'Music' },
+    { id: 'purchases', label: 'Мои покупки', icon: 'ShoppingBag' },
     { id: 'playlists', label: 'Плейлисты', icon: 'ListMusic' },
     { id: 'artists', label: 'Исполнители', icon: 'Mic2' },
     { id: 'upload', label: 'Загрузить', icon: 'Upload' },
@@ -29,6 +31,8 @@ export default function Index() {
         return <Hero />;
       case 'tracks':
         return <Tracks />;
+      case 'purchases':
+        return <MyPurchases />;
       case 'upload':
         return <Upload />;
       case 'playlists':

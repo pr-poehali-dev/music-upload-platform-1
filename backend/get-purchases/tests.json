@@ -1,0 +1,32 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test get purchases without email",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test get purchases with email",
+      "method": "GET",
+      "path": "/?email=user@example.com",
+      "expectedStatus": 200,
+      "expectedBody": {
+        "purchases": "array",
+        "count": "number"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

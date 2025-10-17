@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS CORS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test payment webhook success",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "event": "payment.succeeded",
+        "object": {
+          "id": "test-payment-123",
+          "status": "succeeded",
+          "amount": {
+            "value": "299.00"
+          },
+          "description": "Покупка трека",
+          "metadata": {
+            "email": "user@example.com",
+            "track_id": 1,
+            "track_title": "Summer Vibes",
+            "track_artist": "DJ Nova"
+          }
+        }
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "status": "string",
+        "event": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
