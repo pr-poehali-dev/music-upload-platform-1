@@ -18,8 +18,12 @@ export default function Hero() {
           DM STUDIO PRODUCTION
         </h1>
         
-        <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl animate-fade-in">
-          Профессиональная музыкальная студия. Создавай, загружай и делись своими треками с миром.
+        <p className="text-xl md:text-2xl text-muted-foreground mb-4 max-w-3xl animate-fade-in">
+          Студия <span className="font-bold text-primary">Дмитрия Минского</span> — поэта-песенника с 30-летним стажем
+        </p>
+        
+        <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl animate-fade-in leading-relaxed">
+          Если вы здесь, значит вам нравятся мои музыкальные проекты. Я рад каждому! 🎵
         </p>
 
         <div className="flex flex-wrap gap-4 justify-center animate-fade-in">
