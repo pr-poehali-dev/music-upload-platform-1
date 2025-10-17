@@ -1,0 +1,72 @@
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "DM STUDIO PRODUCTION",
+  "description": "Профессиональная музыкальная студия: аренда студии звукозаписи, запись треков, продажа битов и минусов, сведение и мастеринг",
+  "url": "https://dm-studio-production.ru",
+  "telephone": "+7 (999) 123-45-67",
+  "email": "info@dm-studio.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Музыкальная, д. 1",
+    "addressLocality": "Москва",
+    "addressCountry": "RU"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "55.7558",
+    "longitude": "37.6173"
+  },
+  "image": "https://cdn.poehali.dev/projects/54e1c591-87c3-419c-9fbc-454c772a47ee/files/ecc5fa92-2319-4c50-945a-46ef0f66418e.jpg",
+  "priceRange": "1500-2500 RUB",
+  "openingHours": "Mo-Su 00:00-23:59",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Музыкальные услуги",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Аренда студии звукозаписи",
+          "description": "Профессиональная студия звукозаписи с современным оборудованием"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Запись трека",
+          "description": "Качественная запись вокала и инструментов"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Сведение и мастеринг",
+          "description": "Профессиональная обработка аудио"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Product",
+          "name": "Продажа битов и минусов",
+          "description": "Готовые инструментальные композиции"
+        }
+      }
+    ]
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "127"
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "Дмитрий Минский",
+    "jobTitle": "Поэт-песенник, основатель студии",
+    "description": "Поэт-песенник с 30-летним стажем"
+  }
+}
