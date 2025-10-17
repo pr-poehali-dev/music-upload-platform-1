@@ -40,7 +40,7 @@ export default function Hero() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 w-full max-w-4xl">
           <div className="p-6 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 hover:glow-red transition-all">
             <Icon name="Music" className="w-12 h-12 mb-4 mx-auto text-primary" />
-            <h3 className="text-xl font-bold mb-2">1000+ Треков</h3>
+            <h3 className="text-xl font-bold mb-2">Хиты DM-STUDIO</h3>
             <p className="text-muted-foreground">Огромная коллекция музыки разных жанров</p>
           </div>
 
