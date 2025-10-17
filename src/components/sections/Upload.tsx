@@ -8,6 +8,7 @@ import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import AdminAuth from '@/components/AdminAuth';
 import AdminSetup from '@/components/AdminSetup';
+import AdminSettings from '@/components/AdminSettings';
 
 export default function Upload() {
   const { toast } = useToast();
@@ -208,23 +209,27 @@ export default function Upload() {
           </form>
         </Card>
 
-        <div className="mt-8 grid md:grid-cols-3 gap-4">
-          <div className="text-center p-4 rounded-lg bg-card/50 border border-primary/10">
-            <Icon name="Shield" className="w-8 h-8 mx-auto mb-2 text-primary" />
-            <h3 className="font-semibold mb-1">Безопасно</h3>
-            <p className="text-xs text-muted-foreground">Защита авторских прав</p>
-          </div>
+        <div className="mt-8 space-y-6">
+          <AdminSettings />
 
-          <div className="text-center p-4 rounded-lg bg-card/50 border border-secondary/10">
-            <Icon name="Zap" className="w-8 h-8 mx-auto mb-2 text-secondary" />
-            <h3 className="font-semibold mb-1">Быстро</h3>
-            <p className="text-xs text-muted-foreground">Мгновенная публикация</p>
-          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="text-center p-4 rounded-lg bg-card/50 border border-primary/10">
+              <Icon name="Shield" className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <h3 className="font-semibold mb-1">Безопасно</h3>
+              <p className="text-xs text-muted-foreground">Защита авторских прав</p>
+            </div>
 
-          <div className="text-center p-4 rounded-lg bg-card/50 border border-primary/10">
-            <Icon name="Globe" className="w-8 h-8 mx-auto mb-2 text-primary" />
-            <h3 className="font-semibold mb-1">Доступно</h3>
-            <p className="text-xs text-muted-foreground">Для всего мира</p>
+            <div className="text-center p-4 rounded-lg bg-card/50 border border-secondary/10">
+              <Icon name="Zap" className="w-8 h-8 mx-auto mb-2 text-secondary" />
+              <h3 className="font-semibold mb-1">Быстро</h3>
+              <p className="text-xs text-muted-foreground">Мгновенная публикация</p>
+            </div>
+
+            <div className="text-center p-4 rounded-lg bg-card/50 border border-primary/10">
+              <Icon name="Globe" className="w-8 h-8 mx-auto mb-2 text-primary" />
+              <h3 className="font-semibold mb-1">Доступно</h3>
+              <p className="text-xs text-muted-foreground">Для всего мира</p>
+            </div>
           </div>
         </div>
       </div>
