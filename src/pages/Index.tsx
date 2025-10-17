@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
+import { startAmbientMusic, stopAmbientMusic, isAmbientMusicPlaying } from '@/utils/ambientMusic';
 import Hero from '@/components/sections/Hero';
 import Tracks from '@/components/sections/Tracks';
 import Upload from '@/components/sections/Upload';
@@ -13,6 +14,30 @@ import MyPurchases from '@/components/sections/MyPurchases';
 export default function Index() {
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+
+  useEffect(() => {
+    // Запустить фоновую музыку при загрузке страницы
+    const timer = setTimeout(() => {
+      startAmbientMusic();
+      setIsMusicPlaying(true);
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+      stopAmbientMusic();
+    };
+  }, []);
+
+  const toggleMusic = () => {
+    if (isMusicPlaying) {
+      stopAmbientMusic();
+      setIsMusicPlaying(false);
+    } else {
+      startAmbientMusic();
+      setIsMusicPlaying(true);
+    }
+  };
 
   const menuItems = [
     { id: 'home', label: 'Главная', icon: 'Home' },
@@ -59,10 +84,10 @@ export default function Index() {
                 alt="DM STUDIO PRODUCTION" 
                 className="w-12 h-12 rounded-full glow-red"
               />
-              <h1 className="text-2xl font-bold text-glow">DM STUDIO PRODUCTION</h1>
+              <h1 className="text-2xl font-bold text-glow hidden sm:block">DM STUDIO PRODUCTION</h1>
             </div>
 
-            <div className="hidden md:flex gap-2">
+            <div className="hidden md:flex gap-2 items-center">
               {menuItems.map((item) => (
                 <Button
                   key={item.id}
@@ -74,16 +99,34 @@ export default function Index() {
                   {item.label}
                 </Button>
               ))}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleMusic}
+                className="ml-2"
+                title={isMusicPlaying ? 'Выключить музыку' : 'Включить музыку'}
+              >
+                <Icon name={isMusicPlaying ? 'Volume2' : 'VolumeX'} className="w-5 h-5" />
+              </Button>
             </div>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              <Icon name={mobileMenuOpen ? 'X' : 'Menu'} className="w-6 h-6" />
-            </Button>
+            <div className="flex items-center gap-2 md:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleMusic}
+                title={isMusicPlaying ? 'Выключить музыку' : 'Включить музыку'}
+              >
+                <Icon name={isMusicPlaying ? 'Volume2' : 'VolumeX'} className="w-5 h-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                <Icon name={mobileMenuOpen ? 'X' : 'Menu'} className="w-6 h-6" />
+              </Button>
+            </div>
           </div>
 
           {mobileMenuOpen && (
