@@ -3,47 +3,99 @@ const audioContext = typeof window !== 'undefined' ? new (window.AudioContext ||
 let isPlaying = false;
 let masterGain: GainNode | null = null;
 let oscillators: OscillatorNode[] = [];
+let melodyInterval: number | null = null;
 
-const chordProgressions = [
-  // Am - F - C - G (спокойная прогрессия)
-  [220, 174.61, 261.63],    // Am (A, C, E)
-  [174.61, 220, 261.63],    // F (F, A, C)
-  [261.63, 329.63, 392],    // C (C, E, G)
-  [196, 246.94, 293.66],    // G (G, B, D)
+const classicalProgression = [
+  { name: 'C Major', notes: [261.63, 329.63, 392.00] },
+  { name: 'Am', notes: [220.00, 261.63, 329.63] },
+  { name: 'F Major', notes: [174.61, 220.00, 261.63] },
+  { name: 'G Major', notes: [196.00, 246.94, 293.66] },
+  { name: 'Em', notes: [164.81, 196.00, 246.94] },
+  { name: 'Am', notes: [220.00, 261.63, 329.63] },
+  { name: 'Dm', notes: [146.83, 174.61, 220.00] },
+  { name: 'G Major', notes: [196.00, 246.94, 293.66] },
+];
+
+const melodyNotes = [
+  523.25, 587.33, 659.25, 698.46, 783.99, 698.46, 659.25, 587.33,
+  523.25, 493.88, 523.25, 587.33, 523.25, 493.88, 440.00, 493.88,
+  523.25, 587.33, 659.25, 783.99, 880.00, 783.99, 659.25, 587.33,
+  523.25, 493.88, 440.00, 493.88, 523.25, 587.33, 523.25, 493.88,
 ];
 
 let currentChordIndex = 0;
-let chordChangeInterval: number | null = null;
+let currentMelodyIndex = 0;
 
-const playChord = (frequencies: number[]) => {
+const createOscillator = (freq: number, type: OscillatorType, volume: number, fadeIn: number = 2) => {
+  if (!audioContext || !masterGain) return null;
+
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+
+  oscillator.connect(gainNode);
+  gainNode.connect(masterGain);
+
+  oscillator.type = type;
+  oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+
+  gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+  gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + fadeIn);
+
+  oscillator.start(audioContext.currentTime);
+  
+  return { oscillator, gainNode };
+};
+
+const playChord = (chord: { name: string; notes: number[] }, smooth: boolean = true) => {
   if (!audioContext || !masterGain) return;
 
-  // Остановить предыдущие осцилляторы
-  oscillators.forEach(osc => {
-    osc.stop();
-    osc.disconnect();
+  oscillators.forEach(({ oscillator, gainNode }) => {
+    if (smooth) {
+      gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+      setTimeout(() => {
+        try {
+          oscillator.stop();
+          oscillator.disconnect();
+        } catch (e) {}
+      }, 500);
+    } else {
+      try {
+        oscillator.stop();
+        oscillator.disconnect();
+      } catch (e) {}
+    }
   });
   oscillators = [];
 
-  // Создать новые осцилляторы для аккорда
-  frequencies.forEach((freq, index) => {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    oscillator.connect(gainNode);
-    gainNode.connect(masterGain!);
-
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
-
-    // Разная громкость для разных нот в аккорде
-    const volume = index === 0 ? 0.03 : 0.02;
-    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-    gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 2); // Плавное нарастание
-
-    oscillator.start(audioContext.currentTime);
-    oscillators.push(oscillator);
+  chord.notes.forEach((freq, index) => {
+    const result = createOscillator(
+      freq,
+      'triangle',
+      index === 0 ? 0.04 : 0.03,
+      smooth ? 3 : 2
+    );
+    if (result) oscillators.push(result);
   });
+};
+
+const playMelodyNote = () => {
+  if (!audioContext || !masterGain || !isPlaying) return;
+
+  const freq = melodyNotes[currentMelodyIndex];
+  const result = createOscillator(freq, 'sine', 0.015, 0.1);
+  
+  if (result) {
+    const { oscillator, gainNode } = result;
+    gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.8);
+    setTimeout(() => {
+      try {
+        oscillator.stop();
+        oscillator.disconnect();
+      } catch (e) {}
+    }, 800);
+  }
+
+  currentMelodyIndex = (currentMelodyIndex + 1) % melodyNotes.length;
 };
 
 export const startAmbientMusic = () => {
@@ -51,19 +103,28 @@ export const startAmbientMusic = () => {
 
   isPlaying = true;
 
-  // Создать мастер-регулятор громкости
   masterGain = audioContext.createGain();
   masterGain.connect(audioContext.destination);
-  masterGain.gain.setValueAtTime(0.3, audioContext.currentTime);
+  masterGain.gain.setValueAtTime(0.25, audioContext.currentTime);
 
-  // Начать с первого аккорда
-  playChord(chordProgressions[currentChordIndex]);
+  playChord(classicalProgression[currentChordIndex], false);
 
-  // Менять аккорды каждые 4 секунды
-  chordChangeInterval = window.setInterval(() => {
-    currentChordIndex = (currentChordIndex + 1) % chordProgressions.length;
-    playChord(chordProgressions[currentChordIndex]);
-  }, 4000);
+  const chordChangeInterval = setInterval(() => {
+    if (!isPlaying) {
+      clearInterval(chordChangeInterval);
+      return;
+    }
+    currentChordIndex = (currentChordIndex + 1) % classicalProgression.length;
+    playChord(classicalProgression[currentChordIndex]);
+  }, 6000);
+
+  melodyInterval = window.setInterval(() => {
+    if (!isPlaying) {
+      if (melodyInterval) clearInterval(melodyInterval);
+      return;
+    }
+    playMelodyNote();
+  }, 600);
 };
 
 export const stopAmbientMusic = () => {
@@ -71,20 +132,16 @@ export const stopAmbientMusic = () => {
 
   isPlaying = false;
 
-  // Плавно затухание
   if (masterGain) {
-    masterGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1);
+    masterGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 2);
   }
 
-  // Остановить осцилляторы через 1 секунду
   setTimeout(() => {
-    oscillators.forEach(osc => {
+    oscillators.forEach(({ oscillator }) => {
       try {
-        osc.stop();
-        osc.disconnect();
-      } catch (e) {
-        // Игнорировать ошибки если осциллятор уже остановлен
-      }
+        oscillator.stop();
+        oscillator.disconnect();
+      } catch (e) {}
     });
     oscillators = [];
 
@@ -93,13 +150,14 @@ export const stopAmbientMusic = () => {
       masterGain = null;
     }
 
-    if (chordChangeInterval) {
-      clearInterval(chordChangeInterval);
-      chordChangeInterval = null;
+    if (melodyInterval) {
+      clearInterval(melodyInterval);
+      melodyInterval = null;
     }
 
     currentChordIndex = 0;
-  }, 1000);
+    currentMelodyIndex = 0;
+  }, 2000);
 };
 
 export const toggleAmbientMusic = () => {
