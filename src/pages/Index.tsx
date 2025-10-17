@@ -99,26 +99,9 @@ export default function Index() {
                   {item.label}
                 </Button>
               ))}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleMusic}
-                className="ml-2"
-                title={isMusicPlaying ? 'Выключить музыку' : 'Включить музыку'}
-              >
-                <Icon name={isMusicPlaying ? 'Volume2' : 'VolumeX'} className="w-5 h-5" />
-              </Button>
             </div>
 
             <div className="flex items-center gap-2 md:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleMusic}
-                title={isMusicPlaying ? 'Выключить музыку' : 'Включить музыку'}
-              >
-                <Icon name={isMusicPlaying ? 'Volume2' : 'VolumeX'} className="w-5 h-5" />
-              </Button>
               <Button
                 variant="ghost"
                 size="icon"
