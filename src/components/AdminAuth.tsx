@@ -10,8 +10,6 @@ interface AdminAuthProps {
   onAuthenticated: () => void;
 }
 
-const ADMIN_PASSWORD = 'dm2024';
-
 export default function AdminAuth({ onAuthenticated }: AdminAuthProps) {
   const { toast } = useToast();
   const [password, setPassword] = useState('');
@@ -20,7 +18,9 @@ export default function AdminAuth({ onAuthenticated }: AdminAuthProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (password === ADMIN_PASSWORD) {
+    const savedPassword = localStorage.getItem('dm-studio-password');
+    
+    if (password === savedPassword) {
       localStorage.setItem('dm-studio-admin', 'true');
       onAuthenticated();
       toast({

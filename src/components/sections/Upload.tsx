@@ -7,10 +7,12 @@ import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 import AdminAuth from '@/components/AdminAuth';
+import AdminSetup from '@/components/AdminSetup';
 
 export default function Upload() {
   const { toast } = useToast();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasPassword, setHasPassword] = useState(false);
   const [audioUrl, setAudioUrl] = useState('');
   const [formData, setFormData] = useState({
     title: '',
@@ -21,8 +23,12 @@ export default function Upload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   useEffect(() => {
+    const savedPassword = localStorage.getItem('dm-studio-password');
     const adminAuth = localStorage.getItem('dm-studio-admin');
-    if (adminAuth === 'true') {
+    
+    setHasPassword(!!savedPassword);
+    
+    if (adminAuth === 'true' && savedPassword) {
       setIsAuthenticated(true);
     }
   }, []);
@@ -48,6 +54,13 @@ export default function Upload() {
     setSelectedFile(null);
     setAudioUrl('');
   };
+
+  if (!hasPassword) {
+    return <AdminSetup onSetupComplete={() => {
+      setHasPassword(true);
+      setIsAuthenticated(true);
+    }} />;
+  }
 
   if (!isAuthenticated) {
     return <AdminAuth onAuthenticated={() => setIsAuthenticated(true)} />;
