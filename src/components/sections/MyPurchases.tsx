@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
+import { playPianoNote, pianoNotes } from '@/utils/sound';
 
 interface Purchase {
   id: number;
@@ -70,6 +71,7 @@ export default function MyPurchases() {
     e.preventDefault();
     if (!email) return;
 
+    playPianoNote(pianoNotes.G4);
     localStorage.setItem('user-email', email);
     loadPurchases(email);
   };
@@ -86,6 +88,7 @@ export default function MyPurchases() {
   };
 
   const handleDownload = async (purchase: Purchase) => {
+    playPianoNote(pianoNotes.B4);
     try {
       const savedEmail = localStorage.getItem('user-email');
       if (!savedEmail) {

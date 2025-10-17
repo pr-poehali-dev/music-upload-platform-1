@@ -6,6 +6,7 @@ import Icon from '@/components/ui/icon';
 import { Badge } from '@/components/ui/badge';
 import AudioPlayer from '@/components/AudioPlayer';
 import PaymentDialog from '@/components/PaymentDialog';
+import { playPianoNote, pianoNotes } from '@/utils/sound';
 
 const mockTracks = [
   { id: 1, title: 'Summer Vibes', artist: 'DJ Nova', genre: 'House', duration: '3:45', plays: '12.5K', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', downloadUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
@@ -43,6 +44,7 @@ export default function Tracks() {
   const isTrackPurchased = (trackId: number) => purchasedTracks.includes(trackId);
 
   const handlePlayTrack = (track: Track) => {
+    playPianoNote(pianoNotes.A4);
     if (!isTrackPurchased(track.id)) {
       setPaymentTrack(track);
       setIsPaymentOpen(true);
@@ -137,11 +139,19 @@ export default function Tracks() {
                       size="icon" 
                       variant="ghost" 
                       className="hover:bg-primary/20"
-                      onClick={() => setCurrentTrack(track)}
+                      onClick={() => {
+                        playPianoNote(pianoNotes.A4);
+                        setCurrentTrack(track);
+                      }}
                     >
                       <Icon name="Play" className="w-5 h-5" />
                     </Button>
-                    <Button size="icon" variant="ghost" className="hover:bg-primary/20">
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      className="hover:bg-primary/20"
+                      onClick={() => playPianoNote(pianoNotes.F4)}
+                    >
                       <Icon name="Heart" className="w-5 h-5" />
                     </Button>
                     <Button 
@@ -149,6 +159,7 @@ export default function Tracks() {
                       variant="ghost" 
                       className="hover:bg-primary/20"
                       onClick={() => {
+                        playPianoNote(pianoNotes.D4);
                         const link = document.createElement('a');
                         link.href = track.downloadUrl;
                         link.download = `${track.title} - ${track.artist}.mp3`;
